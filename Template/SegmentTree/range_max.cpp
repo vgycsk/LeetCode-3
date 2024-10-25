@@ -25,6 +25,25 @@ class SegTreeNode
         }        
     }    
     
+    SegTreeNode(int a, int b, vector<int>& val)  // init for range [a,b] with the same-size array val
+    {                 
+        tag = 0;
+        info = 0;
+        start = a, end = b;
+        if (a==b)
+        {
+            info = val[a];
+            return;
+        }        
+        int mid = (a+b)/2;
+        if (left==NULL)
+        {
+            left = new SegTreeNode(a, mid, val);
+            right = new SegTreeNode(mid+1, b, val);            
+            info = max(left->info, right->info);  // check with your own logic
+        }        
+    } 
+    
     void pushDown()
     {
         if (tag==1 && left)
@@ -61,7 +80,7 @@ class SegTreeNode
     {
         if (b < start || a > end )
         {
-            return INT_MIN;  // check with your own logic
+            return INT_MIN/2;  // check with your own logic
         }
         if (a <= start && end <=b)
         {
@@ -83,7 +102,7 @@ class SegTreeNode
 
 int main()
 {
-    SegTreeNode* root = new SegTreeNode(0, length-1, 0);
+    SegTreeNode* root = new SegTreeNode(0, length-1, initVals);  // Set the leaf nodes with initVals.
   
     for (auto& update: updates)
     {
